@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Modal Webcomponnet</title>
+    <script></script>
+    <style>
+      .wrapper {
+        --offset: 0;
+        --z-index: 1;
+        z-index: 1 /* The orders of modals*/;
+      }
+      .wrapper:not(.open) {
+        display: none;
+        opacity: 0;
+      }
+      .wrapper.open {
+        display: block;
+        opacity: 1;
+      }
+      .overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.8);
+      }
+      .wrapper[overlay="false"] .overlay {
+        display: none;
+      }
+      .modal {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        background: white;
+      }
+      .wrapper.open[position="right"] .modal {
+        right: 0;
+        top: 0;
+      }
+      .wrapper.open[position="left"] .modal {
+        left: 0;
+        top: 0;
+      }
+      .wrapper[position]:not([position="center"]) .modal {
+        translate: transform 1s linear;
+      }
+      .wrapper.open[position="center"] .modal {
+        transform: translate(-50%, -50%);
+        left: 50%;
+        top: 50%;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrapper open" position="left" overlay="true">
+      <div class="overlay"></div>
+      <div class="modal">
+        <div style="background: red; height: 100vh; width: 500px">ss</div>
+      </div>
+    </div>
+  </body>
+</html>
