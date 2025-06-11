@@ -2,15 +2,15 @@
 <html>
   <head>
     <title>Modal Webcomponnet</title>
-    <script></script>
+    <script src="./modal-component.min.js"></script>
     <style>
       .wrapper {
-        --offset: 0;
+        --offset: 0px;
         --z-index: 1;
         z-index: 1 /* The orders of modals*/;
       }
       .wrapper:not(.open) {
-        display: none;
+        visibility: hidden;
         opacity: 0;
       }
       .wrapper.open {
@@ -22,6 +22,7 @@
         top: 0;
         left: 0;
         width: 100vw;
+        z-index: 0 /* The orders of modals*/;
         height: 100vh;
         background: rgba(0, 0, 0, 0.8);
       }
@@ -33,17 +34,35 @@
         top: 50%;
         left: 50%;
         background: white;
-      }
-      .wrapper.open[position="right"] .modal {
-        right: 0;
-        top: 0;
-      }
-      .wrapper.open[position="left"] .modal {
+        opacity: 0;
         left: 0;
         top: 0;
       }
+      .wrapper.open .modal {
+        opacity: 1;
+      }
+      .wrapper.open[position="right"] .modal {
+        right: var(--offset);
+        top: 0;
+        left: unset;
+        transform: translateX(0%);
+      }
+      .wrapper[position="right"]:not(.open) .modal {
+        transform: translateX(100%);
+      }
+      .wrapper[position="left"]:not(.open) .modal {
+        transform: translateX(-100%);
+      }
+      .wrapper.open[position="left"] .modal {
+        left: var(--offset);
+        top: 0;
+        transform: translateX(0%);
+      }
       .wrapper[position]:not([position="center"]) .modal {
-        translate: transform 1s linear;
+        transition: transform 250ms ease-out;
+      }
+      .wrapper[position="center"] .modal {
+        transition: opacity 150ms ease-out;
       }
       .wrapper.open[position="center"] .modal {
         transform: translate(-50%, -50%);
@@ -53,11 +72,47 @@
     </style>
   </head>
   <body>
-    <div class="wrapper open" position="left" overlay="true">
+    <div class="wrapper" position="right" overlay="false">
       <div class="overlay"></div>
       <div class="modal">
         <div style="background: red; height: 100vh; width: 500px">ss</div>
       </div>
     </div>
+    <button class="open-modal">OPen</button>
+    <modal-element
+      id="menu"
+      opacity-overlay="0.8"
+      z-index-overlay="997"
+      z-index="999"
+      position="left"
+      offset="0px"
+      overlay
+    >
+      <div
+        id="sub-menu-item"
+        style="width: 400px; height: 100vh; background: red"
+      >
+        LoveMySelf
+      </div>
+    </modal-element>
+    <modal-element id="sub-menu" z-index="998" position="left" offset="400px">
+      <div style="width: 400px; height: 100vh; background: blue">sub-menu</div>
+    </modal-element>
   </body>
+  <script>
+    document.querySelector(".open-modal").addEventListener("click", () => {
+      //document.querySelector(".wrapper").classList.add("open");
+      document.querySelector("modal-element").open();
+    });
+    document.querySelector("#sub-menu-item").addEventListener("click", () => {
+      //document.querySelector(".wrapper").classList.add("open");
+      document.querySelector("#sub-menu").open();
+    });
+    document.querySelector("#menu").addEventListener("close", () => {
+      document.querySelector("#sub-menu").close();
+    });
+    setTimeout(() => {
+      document.querySelector("modal-element").open();
+    }, 1000);
+  </script>
 </html>
